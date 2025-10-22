@@ -50,8 +50,8 @@ export class ProductsController {
   show(@Param() params) {
     const product = ProductsController.products[params.id - 1];
     const viewData = [];
-    viewData['title'] = product.name + '- GOKASUWA';
-    viewData['subtitle'] = product.name + '- Product Information';
+    viewData['title'] = product.name + ' - GOKASUWA';
+    viewData['subtitle'] = product.name + ' - Product Information';
     viewData['product'] = product;
     return {
       viewData: viewData,
