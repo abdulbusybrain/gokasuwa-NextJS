@@ -32,8 +32,8 @@ export class ProductsController {
       const product = await this.productsService.findOne(params.id);
 
       const viewData = [];
-      viewData['title'] = product.name + ' - GOKASUWA';
-      viewData['subtitle'] = product.name + ' - Product Information';
+      viewData['title'] = product.getName() + ' - GOKASUWA';
+      viewData['subtitle'] = product.getName() + ' - Product Information';
       viewData['product'] = product;
       return response.render('products/show', { viewData: viewData });
     } catch (error) {
