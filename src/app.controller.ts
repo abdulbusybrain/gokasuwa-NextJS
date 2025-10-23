@@ -5,8 +5,8 @@ export class AppController {
   @Get('/')
   @Render('index')
   index() {
-    let viewData = [];
-    viewData['title'] = 'Home Page - GOKASUWA';
+    const viewData = [];
+    viewData['title'] = 'Homepage - GOKASUWA';
     return {
       viewData: viewData,
     };
@@ -16,10 +16,11 @@ export class AppController {
   @Render('about')
   about() {
     const viewData = [];
-    viewData['title'] = 'About us - GOKASUWA Online Store';
+    viewData['title'] = 'About us - GOKASUWA';
     viewData['subtitle'] = 'About us';
-    viewData['description'] = 'This is an about page...';
-    viewData['author'] = 'Developed by: Abdullahi(Busybrain)';
+    viewData['description'] =
+      'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Veniam harum amet asperiores labore a quidem in optio dolores velit non ad, minus tenetur, aliquam distinctio quis deserunt doloribus architecto maxime.';
+    viewData['author'] = `Developed by: Abdullahi(Busybrain)`;
 
     return {
       viewData: viewData,

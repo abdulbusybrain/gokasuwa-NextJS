@@ -27,4 +27,8 @@ export class ProductsService {
     if (!product) throw new NotFoundException(`Product ${id} not found`);
     return product;
   }
+
+  createOrUpdate(product: Product): Promise<Product> {
+    return this.productsRepository.save(product);
+  }
 }
