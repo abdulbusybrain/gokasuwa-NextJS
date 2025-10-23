@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Post, Redirect, Render } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Redirect,
+  Render,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Product } from 'src/models/product.entity';
 import { ProductsService } from 'src/models/products.service';
 
@@ -16,13 +26,14 @@ export class AdminProductsController {
   }
 
   @Post('/store')
+  @UseInterceptors(FileInterceptor('image', { dest: './public/uploads' }))
   @Redirect('/admin/products')
-  async store(@Body() body) {
+  async store(@Body() body, @UploadedFile() file: Express.Multer.File) {
     const newProduct = new Product();
     newProduct.setName(body.name);
     newProduct.setDescription(body.description);
     newProduct.setPrice(body.price);
-    newProduct.setImage('backpack.jpg');
+    newProduct.setImage(file.filename);
     await this.productsService.createOrUpdate(newProduct);
   }
 }
