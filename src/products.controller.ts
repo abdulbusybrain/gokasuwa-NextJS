@@ -1,60 +1,49 @@
-import { Controller, Get, Param, Render } from '@nestjs/common';
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Render,
+  Res,
+} from '@nestjs/common';
+import { ProductsService } from './models/products.service';
 
 @Controller('/products')
 export class ProductsController {
-  static products = [
-    {
-      id: '1',
-      name: 'Backpack',
-      description: 'Best Backpack',
-      image: 'backpack.jpg',
-      price: '1000',
-    },
-    {
-      id: '2',
-      name: 'iPhone 17',
-      description: 'Best iPhone 17',
-      image: 'iphone17.jpg',
-      price: '999',
-    },
-    {
-      id: '3',
-      name: 'Headphone',
-      description: 'Best Headphone',
-      image: 'headphone.jpg',
-      price: '30',
-    },
-    {
-      id: '4',
-      name: 'EyeGlass',
-      description: 'Best EyeGlass',
-      image: 'eyeglass.jpg',
-      price: '100',
-    },
-  ];
+  constructor(private readonly productsService: ProductsService) {}
 
   @Get('/')
   @Render('products/index')
-  index() {
+  async index() {
     const viewData = [];
     viewData['title'] = 'Products - GOKASUWA';
     viewData['subtitle'] = 'List of profucts';
-    viewData['products'] = ProductsController.products;
+
+    viewData['products'] = await this.productsService.findAll();
     return {
       viewData: viewData,
     };
   }
 
   @Get('/:id')
-  @Render('products/show')
-  show(@Param() params) {
-    const product = ProductsController.products[params.id - 1];
-    const viewData = [];
-    viewData['title'] = product.name + ' - GOKASUWA';
-    viewData['subtitle'] = product.name + ' - Product Information';
-    viewData['product'] = product;
-    return {
-      viewData: viewData,
-    };
+  async show(@Param() params, @Res() response) {
+    try {
+      const product = await this.productsService.findOne(params.id);
+
+      const viewData = [];
+      viewData['title'] = product.name + ' - GOKASUWA';
+      viewData['subtitle'] = product.name + ' - Product Information';
+      viewData['product'] = product;
+      return response.render('products/show', { viewData: viewData });
+    } catch (error) {
+      if (
+        error instanceof NotFoundException ||
+        error instanceof BadRequestException
+      ) {
+        return response.redirect('/products');
+      }
+      throw error;
+    }
   }
 }
